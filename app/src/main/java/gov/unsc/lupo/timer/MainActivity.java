@@ -1,8 +1,5 @@
 package gov.unsc.lupo.timer;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ComponentActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
