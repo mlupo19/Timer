@@ -2,9 +2,10 @@ package gov.unsc.lupo.timer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 
-public class Timer extends AppCompatActivity {
+public class Timer extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
