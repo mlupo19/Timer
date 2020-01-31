@@ -1,12 +1,39 @@
 package gov.unsc.lupo.timer;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
 public class WorldClock extends Activity {
+
+    private LocationRequest mLocationRequest;
+    private LocationCallback mLocationCallback;
+    private FusedLocationProviderClient mFusedLocationClient;
+
+    private final String BASEURL = "http://api.timezonedb.com/v2.1/get-time-zone?key=EJEFWNO52XKX&format=xml&by=position";
+    private final String LAT = "&lat=";
+    private final String LON = "&lng=";
 
     public String sendGetRequest(String link) {
         try {
@@ -18,10 +45,35 @@ public class WorldClock extends Activity {
         return null;
     }
 
-    public void parseJSON(String JSON) {
+    public String parseJSON(String JSON) {
         System.out.println("JSON string result: " + JSON);
-        String timeDate = JSON.substring(JSON.indexOf("<formatted>") + "<formatted>".length(), JSON.indexOf("</formatted>"));
-        System.out.println("Formatted time: " + timeDate);
+        if (JSON.length() > 0) {
+            String timeDate = JSON.substring(JSON.indexOf("<formatted>") + "<formatted>".length(), JSON.indexOf("</formatted>"));
+            System.out.println("Formatted time: " + timeDate);
+            return timeDate;
+        }
+        return null;
+    }
+
+    public void startLocating() {
+        // requesting location changes if location permissions is enabled
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10);
+        mLocationRequest.setFastestInterval(1);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                //Location Permission already granted
+                mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+            } else {
+                //Request Location Permission
+                checkLocationPermission();
+            }
+        }
+        else {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        }
     }
 
     @Override
@@ -29,10 +81,84 @@ public class WorldClock extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_world_clock);
 
-        String baseURL = "http://api.timezonedb.com/v2.1/get-time-zone?key=EJEFWNO52XKX&format=xml&by=position";
-        String lat = "&lat=40.689247";
-        String lon = "&lng=-74.044502";
-        parseJSON(sendGetRequest(baseURL + lat + lon));
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                List<Location> locationList = locationResult.getLocations();
+                if (locationList.size() > 0) {
+                    //The last location in the list is the newest
+                    Location currentLocation = locationList.get(locationList.size() - 1);
+                    ((TextView) findViewById(R.id.w_worldClock)).setText(parseJSON(sendGetRequest(BASEURL + LAT + currentLocation.getLatitude() + LON + currentLocation.getLongitude())));
+                }
+            }
+        };
+
+        startLocating();
     }
+
+    // required function
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mFusedLocationClient != null) {
+            startLocating();
+        }
+    }
+
+    // Everything below here is obtaining user location permissions
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app needs the Location permission, please accept to use location functionality")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(WorldClock.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+            else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION );
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+                }
+            }
+            else
+                Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
 }
