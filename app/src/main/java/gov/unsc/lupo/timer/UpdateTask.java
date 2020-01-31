@@ -23,21 +23,7 @@ public class UpdateTask extends AsyncTask<String, String, String> {
             while ((responseLine = bufferedReader.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            System.out.println("JSON string result: " + response.toString());
-//            HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
-//            httpsURLConnection.setRequestMethod("GET");
-//            httpsURLConnection.setInstanceFollowRedirects(false);
-
-//            int responseCode = httpsURLConnection.getResponseCode();
-//            if (responseCode == HttpsURLConnection.HTTP_OK) {
-//                BufferedReader in = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
-//                StringBuffer response = new StringBuffer();
-//                System.out.println("JSON string result: " + response.toString());
-//                return response.toString();
-//            }
-//            else
-//                System.out.println("Failed to get request");
-
+            return response.toString();
         }
         catch (IOException e) {
             Log.e("IOException", e.toString());

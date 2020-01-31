@@ -2,20 +2,9 @@ package gov.unsc.lupo.timer;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.Buffer;
 import java.util.concurrent.ExecutionException;
 
-import javax.net.ssl.HttpsURLConnection;
 
 public class WorldClock extends Activity {
 
@@ -30,6 +19,9 @@ public class WorldClock extends Activity {
     }
 
     public void parseJSON(String JSON) {
+        System.out.println("JSON string result: " + JSON);
+        String timeDate = JSON.substring(JSON.indexOf("<formatted>") + "<formatted>".length(), JSON.indexOf("</formatted>"));
+        System.out.println("Formatted time: " + timeDate);
     }
 
     @Override
