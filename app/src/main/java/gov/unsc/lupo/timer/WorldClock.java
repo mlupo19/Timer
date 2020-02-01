@@ -6,9 +6,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -45,12 +52,22 @@ public class WorldClock extends Activity {
         return null;
     }
 
-    public String parseJSON(String JSON) {
-        System.out.println("JSON string result: " + JSON);
-        if (JSON.length() > 0) {
-            String timeDate = JSON.substring(JSON.indexOf("<formatted>") + "<formatted>".length(), JSON.indexOf("</formatted>"));
-            System.out.println("Formatted time: " + timeDate);
-            return timeDate;
+    public HashMap<String, String> parseXML(String XML) {
+        System.out.println("XML string result: " + XML);
+        if (XML != null && XML.length() > 0 && !XML.substring(XML.indexOf("<status>") + "status".length(), XML.indexOf("</status>")).equals("FAILED")) {
+            HashMap<String, String> timeMap = new HashMap<>();
+            try {
+                String date = new SimpleDateFormat("yyyy-MM-dd").parse(XML.substring(XML.indexOf("<formatted>") + "<formatted>".length(), XML.indexOf("</formatted>") - 9)).toString();
+                timeMap.put("Date", date.substring(0, date.indexOf("00:00:00")) + date.substring(date.indexOf("00:00:00") + 13));
+            }
+            catch (ParseException e) {
+                Log.e("Parse Error", e.toString());
+            }
+            timeMap.put("Time", XML.substring(XML.indexOf("<formatted>") + "<formatted>".length() + 11, XML.indexOf("</formatted>") - 3));
+            timeMap.put("Zone", XML.substring(XML.indexOf("<abbreviation>") + "<abbreviation>".length(), XML.indexOf("</abbreviation>")));
+
+            System.out.println("Current time (" + timeMap.get("Zone") + "): " + timeMap.get("Date") + " | " + timeMap.get("Time"));
+            return timeMap;
         }
         return null;
     }
@@ -58,9 +75,9 @@ public class WorldClock extends Activity {
     public void startLocating() {
         // requesting location changes if location permissions is enabled
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10);
+        mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -91,7 +108,16 @@ public class WorldClock extends Activity {
                 if (locationList.size() > 0) {
                     //The last location in the list is the newest
                     Location currentLocation = locationList.get(locationList.size() - 1);
-                    ((TextView) findViewById(R.id.w_worldClock)).setText(parseJSON(sendGetRequest(BASEURL + LAT + currentLocation.getLatitude() + LON + currentLocation.getLongitude())));
+                    System.out.println("Current location: " + currentLocation.getLatitude() + " | " + currentLocation.getLongitude());
+                    HashMap<String, String> timeData = parseXML(sendGetRequest(BASEURL + LAT + currentLocation.getLatitude() + LON + currentLocation.getLongitude()));
+
+                    if (timeData != null) {
+                        ((TextView) findViewById(R.id.w_worldClock)).setText(timeData.get("Time"));
+                        ((TextView) findViewById(R.id.w_worldDate)).setText(timeData.get("Date"));
+                        ((TextView) findViewById(R.id.w_worldZone)).setText(timeData.get("Zone"));
+
+                        findViewById(R.id.w_textLayout).setVisibility(View.VISIBLE);
+                    }
                 }
             }
         };
