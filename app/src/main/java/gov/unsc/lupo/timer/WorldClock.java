@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -26,7 +25,6 @@ import com.google.android.gms.location.LocationServices;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -54,7 +52,7 @@ public class WorldClock extends Activity {
 
     public HashMap<String, String> parseXML(String XML) {
         System.out.println("XML string result: " + XML);
-        if (XML != null && XML.length() > 0 && !XML.substring(XML.indexOf("<status>") + "status".length(), XML.indexOf("</status>")).equals("FAILED")) {
+        if (XML != null && XML.length() > 0 && !XML.substring(XML.indexOf("<status>") + "<status>".length(), XML.indexOf("</status>")).equals("FAILED")) {
             HashMap<String, String> timeMap = new HashMap<>();
             try {
                 String date = new SimpleDateFormat("yyyy-MM-dd").parse(XML.substring(XML.indexOf("<formatted>") + "<formatted>".length(), XML.indexOf("</formatted>") - 9)).toString();
@@ -99,6 +97,14 @@ public class WorldClock extends Activity {
         setContentView(R.layout.activity_world_clock);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // back button
+        findViewById(R.id.w_backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         mLocationCallback = new LocationCallback() {
