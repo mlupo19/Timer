@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="editClick"
     tools:context=".Timer">
 
     <Button
@@ -28,6 +27,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="number"
+        android:onClick="editClick"
         android:text="00"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,6 +42,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="32dp"
+        android:onClick="resetClick"
         android:text="Reset"
         app:layout_constraintEnd_toStartOf="@+id/tEditSeconds"
         app:layout_constraintStart_toEndOf="@+id/tStartButton"
@@ -68,6 +69,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="number"
+        android:onClick="editClick"
         android:text="00"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,6 +105,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="number"
+        android:onClick="editClick"
         android:text="00"
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/tColon1"
