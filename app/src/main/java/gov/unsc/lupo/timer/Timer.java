@@ -17,6 +17,11 @@ public class Timer extends Activity {
     private boolean running;
     private CountDownTimer cdt;
 
+
+    /*
+        A timer with hours, minutes, seconds.  The edittexts are set to numbers only.
+        Once timer is started, you can pause or reset.  You can't edit the numbers while timer is running.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
