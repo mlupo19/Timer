@@ -24,6 +24,11 @@ public class Stopwatch extends Activity {
     List<String> laps;
 
     @Override
+    //To make the time work with the stopwatch, i used SystemClock.upTimeMillis() to get the milliseconds since the program was launched.
+    //I then used the difference between that time when the start button is clicked and the time when the time updates to update the time
+    //I also used a Handler to control updating the time. I call the handler repeatedly and recursively.
+    //To avoid bugs I enable and disable certain buttons when others are clicked.
+    //For the lap button I use an ArrayList to store the times when the lap button is clicked and I store them in a scroll view so that they do not overlap the time.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stopwatch);
