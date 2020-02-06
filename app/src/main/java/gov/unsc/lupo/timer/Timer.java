@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -32,12 +33,21 @@ public class Timer extends Activity {
     }
 
     public void startClick(View v) {
-        if (!numberIsValid() || running)
+        if (!numberIsValid())
             return;
+        if (running) {
+            running = false;
+            cdt.cancel();
+
+            ((Button) v).setText("Start");
+            return;
+        }
 
         etHours.setEnabled(false);
         etMinutes.setEnabled(false);
         etSeconds.setEnabled(false);
+
+        ((Button) v).setText("Pause");
 
         running = true;
         startTimer();
@@ -53,7 +63,7 @@ public class Timer extends Activity {
 
             @Override
             public void onFinish() {
-                running = false;
+                resetClick(null);
             }
         };
         cdt.start();
@@ -100,6 +110,8 @@ public class Timer extends Activity {
         etHours.setEnabled(true);
         etMinutes.setEnabled(true);
         etSeconds.setEnabled(true);
+
+        ((Button) findViewById(R.id.tStartButton)).setText("Start");
     }
 
 }
