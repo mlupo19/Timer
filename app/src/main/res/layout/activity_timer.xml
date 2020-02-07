@@ -111,4 +111,14 @@
         app:layout_constraintEnd_toStartOf="@+id/tColon1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tEditMinutes" />
+
+    <Button
+        android:id="@+id/tBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tStartButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,14 @@ public class Timer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
+        // back button
+        findViewById(R.id.tBackButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         etHours = findViewById(R.id.tEditHours);
         etMinutes = findViewById(R.id.tEditMinutes);
         etSeconds = findViewById(R.id.tEditSeconds);

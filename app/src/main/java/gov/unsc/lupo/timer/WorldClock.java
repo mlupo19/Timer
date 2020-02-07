@@ -30,6 +30,14 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
+/*
+    The WorldClock starts blank with a back button showing... during this time it is collecting the users current location then
+    it is pinging the timezonedb api to gather information regarding its timezone... this is done in UpdateTask. In android tasks that do not
+    respond immediately like web requests must be done on a separate thread which is why UpdateTask is needed. After the api responds
+    the information is formatted and the ISO time date is turned into a date with the current day and month name.
+    This is displays and refreshed every second by re-requesting the api. Seconds is not shown because the time is only updated when the api
+    responds. This is basically an "online" clock
+ */
 public class WorldClock extends Activity {
 
     private LocationRequest mLocationRequest;
@@ -113,6 +121,7 @@ public class WorldClock extends Activity {
                 List<Location> locationList = locationResult.getLocations();
                 if (locationList.size() > 0) {
                     //The last location in the list is the newest
+                    System.out.println("Test");
                     Location currentLocation = locationList.get(locationList.size() - 1);
                     System.out.println("Current location: " + currentLocation.getLatitude() + " | " + currentLocation.getLongitude());
                     HashMap<String, String> timeData = parseXML(sendGetRequest(BASEURL + LAT + currentLocation.getLatitude() + LON + currentLocation.getLongitude()));
