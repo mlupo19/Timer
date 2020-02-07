@@ -6,4 +6,109 @@
     android:layout_height="match_parent"
     tools:context=".Timer">
 
+    <Button
+        android:id="@+id/tStartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:onClick="startClick"
+        android:text="Start"
+        app:layout_constraintEnd_toStartOf="@+id/tResetButton"
+        app:layout_constraintStart_toEndOf="@+id/tEditHours"
+        app:layout_constraintTop_toBottomOf="@+id/tEditMinutes" />
+
+    <EditText
+        android:id="@+id/tEditMinutes"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="number"
+        android:onClick="editClick"
+        android:text="00"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tColon2"
+        app:layout_constraintStart_toStartOf="@id/tColon1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/tResetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="32dp"
+        android:onClick="resetClick"
+        android:text="Reset"
+        app:layout_constraintEnd_toStartOf="@+id/tEditSeconds"
+        app:layout_constraintStart_toEndOf="@+id/tStartButton"
+        app:layout_constraintTop_toBottomOf="@+id/tEditMinutes" />
+
+    <TextView
+        android:id="@+id/tTimerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Timer"
+        android:textSize="54sp"
+        app:layout_constraintBottom_toTopOf="@+id/tEditMinutes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/tEditSeconds"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="number"
+        android:onClick="editClick"
+        android:text="00"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tColon2"
+        app:layout_constraintTop_toTopOf="@+id/tEditMinutes" />
+
+    <TextView
+        android:id="@+id/tColon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/tEditSeconds"
+        app:layout_constraintStart_toEndOf="@+id/tEditMinutes"
+        app:layout_constraintTop_toTopOf="@+id/tEditMinutes" />
+
+    <TextView
+        android:id="@+id/tColon1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/tEditMinutes"
+        app:layout_constraintStart_toEndOf="@+id/tEditHours"
+        app:layout_constraintTop_toTopOf="@+id/tEditMinutes" />
+
+    <EditText
+        android:id="@+id/tEditHours"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="number"
+        android:onClick="editClick"
+        android:text="00"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/tColon1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tEditMinutes" />
 </androidx.constraintlayout.widget.ConstraintLayout>
