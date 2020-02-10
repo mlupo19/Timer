@@ -19,12 +19,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/intervalTimerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="intervalTimerOnClick"
+        android:text="Interval Timer"
+        app:layout_constraintBottom_toTopOf="@+id/clockButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stopwatchButton" />
+
+    <Button
         android:id="@+id/stopwatchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="watchOnClick"
         android:text="Stopwatch"
-        app:layout_constraintBottom_toTopOf="@+id/clockButton"
+        app:layout_constraintBottom_toTopOf="@+id/intervalTimerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timerButton" />
@@ -40,4 +51,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stopwatchButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

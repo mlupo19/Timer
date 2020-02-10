@@ -6,7 +6,6 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -23,10 +22,18 @@ public class Timer extends Activity {
         Once timer is started, you can pause or reset.  You can't edit the numbers while timer is running.
      */
     @Override
+    // super is called in other onCreate method
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timer);
+        onCreate(savedInstanceState, R.layout.activity_timer);
+    }
 
+    protected void onCreate(Bundle savedInstanceState, int contentViewID) {
+        super.onCreate(savedInstanceState);
+        setContentView(contentViewID);
+        initLayout();
+    }
+
+    private void initLayout() {
         // back button
         findViewById(R.id.tBackButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,10 +41,9 @@ public class Timer extends Activity {
                 finish();
             }
         });
-
-        etHours = findViewById(R.id.tEditHours);
-        etMinutes = findViewById(R.id.tEditMinutes);
-        etSeconds = findViewById(R.id.tEditSeconds);
+        etHours = findViewById(R.id.etAct);
+        etMinutes = findViewById(R.id.etRest);
+        etSeconds = findViewById(R.id.etReps);
     }
 
     public void editClick(View v) {

@@ -11,11 +11,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
     public void timerOnClick(View v) {
         startActivity(new Intent(this, Timer.class));
+    }
+
+    public void intervalTimerOnClick(View v) {
+        startActivity(new Intent(this, IntervalTimer.class));
     }
 
     public void watchOnClick(View v) {
@@ -25,6 +28,5 @@ public class MainActivity extends Activity {
     public void clockOnClick(View v) {
         startActivity(new Intent(this, WorldClock.class));
     }
-
 
 }
